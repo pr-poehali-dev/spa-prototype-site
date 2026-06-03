@@ -183,11 +183,11 @@ export default function Index() {
       {/* NAVBAR */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? "bg-spa-plum/95 backdrop-blur-md shadow-lg" : "bg-transparent"
+          scrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-white/60 backdrop-blur-sm"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <a href="#" className="font-cormorant text-xl font-semibold tracking-wide text-spa-cream">
+          <a href="#" className="font-cormorant text-xl font-semibold tracking-wide text-spa-plum">
             7 <span className="text-gradient-gold">Кругов</span> Рая
           </a>
 
@@ -196,32 +196,32 @@ export default function Index() {
               <button
                 key={item.href}
                 onClick={() => scrollTo(item.href)}
-                className="nav-link font-golos text-sm tracking-wide text-spa-cream/80 hover:text-spa-gold transition-colors"
+                className="nav-link font-golos text-sm tracking-wide text-spa-plum/70 hover:text-spa-gold transition-colors"
               >
                 {item.label}
               </button>
             ))}
             <a
               href={PHONE_HREF}
-              className="ml-4 flex items-center gap-2 bg-gradient-gold text-spa-plum-dark font-semibold text-sm px-4 py-2 rounded-full hover:opacity-90 transition-opacity"
+              className="ml-4 flex items-center gap-2 bg-gradient-gold text-white font-semibold text-sm px-4 py-2 rounded-full hover:opacity-90 transition-opacity"
             >
               <Icon name="Phone" size={14} />
               {PHONE}
             </a>
           </nav>
 
-          <button className="md:hidden text-spa-cream" onClick={() => setMenuOpen(!menuOpen)}>
+          <button className="md:hidden text-spa-plum" onClick={() => setMenuOpen(!menuOpen)}>
             <Icon name={menuOpen ? "X" : "Menu"} size={24} />
           </button>
         </div>
 
         {menuOpen && (
-          <div className="md:hidden bg-spa-plum/98 backdrop-blur-md border-t border-spa-gold/20 px-6 py-6 flex flex-col gap-4">
+          <div className="md:hidden bg-white/98 backdrop-blur-md border-t border-spa-gold/20 px-6 py-6 flex flex-col gap-4">
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.href}
                 onClick={() => scrollTo(item.href)}
-                className="text-left font-cormorant text-xl text-spa-cream hover:text-spa-gold transition-colors"
+                className="text-left font-cormorant text-xl text-spa-plum hover:text-spa-gold transition-colors"
               >
                 {item.label}
               </button>
@@ -242,32 +242,32 @@ export default function Index() {
             backgroundImage: `url(https://cdn.poehali.dev/projects/5c118990-e6c1-42e3-ba4b-946dfd069591/files/272deb7c-f2dc-4f65-9087-99b3fdfb9812.jpg)`,
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-spa-plum-dark/70 via-spa-plum/60 to-spa-plum-dark/80" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-spa-gold/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-1/3 right-1/4 w-72 h-72 bg-spa-terracotta/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-spa-cream/40 to-spa-cream-dark/70" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-spa-rose/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/3 right-1/4 w-72 h-72 bg-spa-gold/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto animate-fade-in">
           <p className="font-golos text-spa-gold tracking-[0.3em] text-xs uppercase mb-6">
             Геленджик · Закрытый клуб
           </p>
-          <h1 className="font-cormorant text-6xl md:text-8xl font-light text-spa-cream leading-tight mb-6">
+          <h1 className="font-cormorant text-6xl md:text-8xl font-light text-spa-plum leading-tight mb-6">
             7 Кругов
             <br />
             <em className="text-gradient-gold not-italic">Рая</em>
           </h1>
-          <p className="font-golos text-spa-cream/75 text-lg md:text-xl max-w-xl mx-auto leading-relaxed mb-10">
+          <p className="font-golos text-spa-plum/65 text-lg md:text-xl max-w-xl mx-auto leading-relaxed mb-10">
             Место, где рождается SPA-магия. Ваш личный оазис отдыха и красоты на берегу Чёрного моря.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => scrollTo("#programs")}
-              className="bg-gradient-gold text-spa-plum-dark font-semibold px-8 py-4 rounded-full hover:opacity-90 transition-all hover:scale-105 text-sm tracking-wide"
+              className="bg-gradient-gold text-white font-semibold px-8 py-4 rounded-full hover:opacity-90 transition-all hover:scale-105 text-sm tracking-wide shadow-lg"
             >
               Смотреть программы
             </button>
             <a
               href={PHONE_HREF}
-              className="border border-spa-gold/50 text-spa-cream px-8 py-4 rounded-full hover:bg-spa-gold/10 transition-all text-sm tracking-wide flex items-center gap-2 justify-center"
+              className="border border-spa-gold/60 text-spa-plum px-8 py-4 rounded-full hover:bg-spa-gold/10 transition-all text-sm tracking-wide flex items-center gap-2 justify-center bg-white/50 backdrop-blur-sm"
             >
               <Icon name="Phone" size={16} />
               Записаться
@@ -275,7 +275,7 @@ export default function Index() {
           </div>
         </div>
 
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-spa-cream/40 animate-bounce">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-spa-plum/40 animate-bounce">
           <Icon name="ChevronDown" size={20} />
         </div>
       </section>
@@ -337,11 +337,11 @@ export default function Index() {
       </section>
 
       {/* CLUB BENEFITS */}
-      <section className="py-20 bg-gradient-plum">
+      <section className="py-20 bg-spa-cream-dark">
         <div className="max-w-7xl mx-auto px-6">
           <RevealSection className="text-center mb-12">
             <p className="font-golos text-spa-gold tracking-[0.25em] text-xs uppercase mb-3">Закрытый клуб</p>
-            <h2 className="font-cormorant text-4xl md:text-5xl font-light text-spa-cream">
+            <h2 className="font-cormorant text-4xl md:text-5xl font-light text-spa-plum">
               Привилегии <em className="text-gradient-gold">участников</em>
             </h2>
           </RevealSection>
@@ -355,13 +355,13 @@ export default function Index() {
               ].map((item) => (
                 <div
                   key={item.title}
-                  className="gold-border rounded-2xl p-6 bg-white/5 backdrop-blur-sm card-hover text-center"
+                  className="gold-border rounded-2xl p-6 bg-white card-hover text-center shadow-sm"
                 >
                   <div className="w-12 h-12 bg-gradient-gold rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Icon name={item.icon} size={20} className="text-spa-plum-dark" />
+                    <Icon name={item.icon} size={20} className="text-white" />
                   </div>
-                  <h3 className="font-cormorant text-xl font-semibold text-spa-cream mb-2">{item.title}</h3>
-                  <p className="font-golos text-spa-cream/60 text-sm leading-relaxed">{item.desc}</p>
+                  <h3 className="font-cormorant text-xl font-semibold text-spa-plum mb-2">{item.title}</h3>
+                  <p className="font-golos text-spa-plum/55 text-sm leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -508,21 +508,22 @@ export default function Index() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-gradient-plum relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-spa-gold/8 rounded-full blur-3xl pointer-events-none" />
+      <section className="py-24 bg-spa-mist relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-spa-rose/30 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-spa-gold/10 rounded-full blur-3xl pointer-events-none" />
         <RevealSection>
           <div className="max-w-3xl mx-auto px-6 text-center relative z-10">
             <p className="font-golos text-spa-gold tracking-[0.25em] text-xs uppercase mb-4">Запись</p>
-            <h2 className="font-cormorant text-5xl md:text-6xl font-light text-spa-cream mb-6">
+            <h2 className="font-cormorant text-5xl md:text-6xl font-light text-spa-plum mb-6">
               Подарите себе <em className="text-gradient-gold">рай</em>
             </h2>
-            <p className="font-golos text-spa-cream/65 text-base mb-10 leading-relaxed">
+            <p className="font-golos text-spa-plum/60 text-base mb-10 leading-relaxed">
               Позвоните нам или напишите в ВКонтакте — подберём идеальную программу именно для вас.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href={PHONE_HREF}
-                className="bg-gradient-gold text-spa-plum-dark font-semibold px-8 py-4 rounded-full hover:opacity-90 transition-all hover:scale-105 flex items-center gap-2 justify-center text-sm tracking-wide"
+                className="bg-gradient-gold text-white font-semibold px-8 py-4 rounded-full hover:opacity-90 transition-all hover:scale-105 flex items-center gap-2 justify-center text-sm tracking-wide shadow-lg"
               >
                 <Icon name="Phone" size={16} />
                 {PHONE}
@@ -531,7 +532,7 @@ export default function Index() {
                 href="https://vk.com/7krugovraya"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border border-spa-gold/40 text-spa-cream px-8 py-4 rounded-full hover:bg-spa-gold/10 transition-all flex items-center gap-2 justify-center text-sm tracking-wide"
+                className="border border-spa-gold/50 text-spa-plum bg-white/70 px-8 py-4 rounded-full hover:bg-white transition-all flex items-center gap-2 justify-center text-sm tracking-wide"
               >
                 <Icon name="MessageCircle" size={16} />
                 ВКонтакте
@@ -542,21 +543,21 @@ export default function Index() {
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-spa-plum-dark py-12 border-t border-spa-gold/10">
+      <footer className="bg-white py-12 border-t border-spa-gold/20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
-              <div className="font-cormorant text-2xl font-semibold text-spa-cream mb-1">
+              <div className="font-cormorant text-2xl font-semibold text-spa-plum mb-1">
                 7 <span className="text-gradient-gold">Кругов</span> Рая
               </div>
-              <div className="font-golos text-xs text-spa-cream/40">SPA-салон · Геленджик</div>
+              <div className="font-golos text-xs text-spa-plum/40">SPA-салон · Геленджик</div>
             </div>
             <nav className="flex flex-wrap gap-6 justify-center">
               {NAV_ITEMS.map((item) => (
                 <button
                   key={item.href}
                   onClick={() => scrollTo(item.href)}
-                  className="font-golos text-sm text-spa-cream/50 hover:text-spa-gold transition-colors"
+                  className="font-golos text-sm text-spa-plum/50 hover:text-spa-gold transition-colors"
                 >
                   {item.label}
                 </button>
@@ -570,8 +571,8 @@ export default function Index() {
               {PHONE}
             </a>
           </div>
-          <div className="border-t border-spa-gold/10 mt-8 pt-6 text-center">
-            <p className="font-golos text-xs text-spa-cream/25">© 2024 7 Кругов Рая. Все права защищены.</p>
+          <div className="border-t border-spa-gold/15 mt-8 pt-6 text-center">
+            <p className="font-golos text-xs text-spa-plum/30">© 2024 7 Кругов Рая. Все права защищены.</p>
           </div>
         </div>
       </footer>

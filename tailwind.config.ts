@@ -58,14 +58,15 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				spa: {
-					gold: '#C9A96E',
-					'gold-light': '#E8C98A',
-					terracotta: '#C4614A',
-					plum: '#3D1F3C',
-					'plum-dark': '#2A1229',
-					cream: '#FAF6F0',
-					'cream-dark': '#F0E8DC',
-					rose: '#E8A598',
+					gold: '#C07A5A',
+					'gold-light': '#E8A87C',
+					terracotta: '#B5593C',
+					plum: '#5C3A2E',
+					'plum-dark': '#3D2218',
+					cream: '#FDF8F5',
+					'cream-dark': '#F9EDE8',
+					rose: '#F2C4B0',
+					mist: '#F5EBE6',
 				},
 			},
 			borderRadius: {

@@ -1,79 +1,133 @@
 import { useEffect, useRef, useState } from "react";
 import Icon from "@/components/ui/icon";
 
-/* ── Константы ─────────────────────────────── */
-const PHONE     = "+7 937 102-19-99";
-const PHONE_RAW = "tel:+79371021999";
-const VK_URL    = "https://vk.com/7krugovraya";
+/* ─── Данные ─────────────────────────────── */
+const PHONE     = "+7 938 438-03-17";
+const PHONE_RAW = "tel:+79384380317";
+const ADDRESS   = "Геленджик, ул. Горная, 4";
+const INSTA     = "https://instagram.com/aleksandra_v_beauty";
 
 const IMG = {
-  hero:    "https://cdn.poehali.dev/projects/5c118990-e6c1-42e3-ba4b-946dfd069591/files/146e080e-a7f1-4a2d-8995-5c0795c6161d.jpg",
-  about:   "https://cdn.poehali.dev/projects/5c118990-e6c1-42e3-ba4b-946dfd069591/files/d68e837d-4665-478a-bac4-fdc3043e293d.jpg",
-  flatlay: "https://cdn.poehali.dev/projects/5c118990-e6c1-42e3-ba4b-946dfd069591/files/1ec58c04-4bd5-4f85-81ce-8d6fba135ced.jpg",
+  hero:      "https://cdn.poehali.dev/projects/5c118990-e6c1-42e3-ba4b-946dfd069591/files/7b8f025e-d53a-410e-97c2-b0bdd2907f1a.jpg",
+  services:  "https://cdn.poehali.dev/projects/5c118990-e6c1-42e3-ba4b-946dfd069591/files/f14a358c-e3f5-4dd2-933d-a49c070c1fa4.jpg",
+  result:    "https://cdn.poehali.dev/projects/5c118990-e6c1-42e3-ba4b-946dfd069591/files/df8bff23-47a9-43b0-8457-e10d9332eb35.jpg",
 };
 
 const NAV = [
-  { label: "О нас",     id: "about"    },
-  { label: "Программы", id: "programs" },
-  { label: "Прайс",     id: "price"    },
-  { label: "Вопросы",   id: "faq"      },
+  { label: "О студии",    id: "about"    },
+  { label: "Направления", id: "services" },
+  { label: "Цены",        id: "price"    },
+  { label: "Контакты",    id: "contacts" },
 ];
 
-const PROGRAMS = [
-  { icon: "Sparkles", title: "Антистресс",       time: "90 мин",  hot: true,
-    desc: "Ароматерапия, горячие камни и релакс-массаж. Полное отключение от мира." },
-  { icon: "Flower2",  title: "Королева",          time: "120 мин", hot: false,
-    desc: "Комплексный уход для лица и тела — очищение, питание, лифтинг-эффект." },
-  { icon: "Droplets", title: "Морская свежесть",  time: "100 мин", hot: false,
-    desc: "Обёртывание с водорослями, пилинг и глубокое увлажнение кожи." },
-  { icon: "Heart",    title: "Для двоих",         time: "120 мин", hot: false,
-    desc: "Синхронный массаж, ванна с лепестками и бокал шампанского." },
-  { icon: "Sun",      title: "Геленджик Детокс",  time: "80 мин",  hot: false,
-    desc: "Охлаждающие обёртывания и лёгкий массаж после солнца и моря." },
-  { icon: "Star",     title: "VIP Клубная",       time: "150 мин", hot: false,
-    desc: "Персональная программа для членов Закрытого Клуба — всё включено." },
+const SERVICES = [
+  {
+    icon: "Zap",
+    tag: "Лазер",
+    title: "Лазерная эпиляция",
+    desc: "Современный диодный лазер. Безопасное и стойкое удаление волос на любом участке тела. Минимум дискомфорта, максимум эффекта.",
+    detail: "С 1-й процедуры",
+    color: "from-rose-50 to-orange-50",
+    accent: "#C9957E",
+  },
+  {
+    icon: "Sparkles",
+    tag: "Брови",
+    title: "Ламинирование бровей",
+    desc: "Долгосрочная укладка и питание волосков. Красивая форма и объём на 6–8 недель без ежедневного ухода.",
+    detail: "Эффект до 8 недель",
+    color: "from-amber-50 to-yellow-50",
+    accent: "#C8A97A",
+  },
+  {
+    icon: "Activity",
+    tag: "Омоложение",
+    title: "Микронидлинг",
+    desc: "Стимуляция выработки коллагена и эластина. Лечение шрамов, пигментации и возрастных изменений кожи.",
+    detail: "Видимый результат после курса",
+    color: "from-pink-50 to-rose-50",
+    accent: "#C9957E",
+  },
+  {
+    icon: "Wind",
+    tag: "Инновация",
+    title: "Холодная плазма",
+    desc: "Безинъекционное омоложение. Подтяжка кожи, сужение пор, лечение акне. Безопасно и без реабилитации.",
+    detail: "Без уколов и хирургии",
+    color: "from-purple-50 to-indigo-50",
+    accent: "#8B7CB3",
+  },
 ];
 
 const PRICES = [
-  { name: "Релакс-массаж",               time: "60 мин",  price: "2 500 ₽" },
-  { name: "Горячие камни",               time: "90 мин",  price: "3 800 ₽" },
-  { name: "Обёртывание",                 time: "60 мин",  price: "3 200 ₽" },
-  { name: "Уход для лица",               time: "60 мин",  price: "2 800 ₽" },
-  { name: "Антистресс (полная программа)", time: "90 мин",  price: "5 500 ₽" },
-  { name: "Королева",                    time: "120 мин", price: "7 200 ₽" },
-  { name: "Для двоих",                   time: "120 мин", price: "12 000 ₽" },
-  { name: "VIP Клубная",                 time: "150 мин", price: "от 9 000 ₽" },
+  {
+    category: "Лазерная эпиляция",
+    items: [
+      { name: "Верхняя губа",    price: "от 600 ₽"  },
+      { name: "Подмышки",        price: "от 900 ₽"  },
+      { name: "Зона бикини",     price: "от 1 500 ₽" },
+      { name: "Голени",          price: "от 2 200 ₽" },
+      { name: "Полные ноги",     price: "от 3 800 ₽" },
+    ],
+  },
+  {
+    category: "Брови и ресницы",
+    items: [
+      { name: "Ламинирование бровей",     price: "от 1 800 ₽" },
+      { name: "Коррекция + окрашивание",  price: "от 1 200 ₽" },
+    ],
+  },
+  {
+    category: "Аппаратная косметология",
+    items: [
+      { name: "Микронидлинг лицо",        price: "от 3 500 ₽" },
+      { name: "Микронидлинг + сыворотка", price: "от 4 500 ₽" },
+      { name: "Холодная плазма лицо",     price: "от 4 000 ₽" },
+      { name: "Холодная плазма — зона",   price: "от 2 000 ₽" },
+    ],
+  },
+];
+
+const REVIEWS = [
+  {
+    name: "Анна К.",
+    stars: 5,
+    text: "Делала лазерную эпиляцию — результат потрясающий! Александра очень профессиональный мастер, объяснила каждый шаг. Буду возвращаться.",
+  },
+  {
+    name: "Мария С.",
+    stars: 5,
+    text: "Ламинирование бровей — это что-то невероятное! Теперь не трачу по утрам время на брови. Всем советую!",
+  },
+  {
+    name: "Елена Т.",
+    stars: 5,
+    text: "Курс микронидлинга просто преобразил кожу. После двух процедур пигментные пятна заметно посветлели. Очень благодарна!",
+  },
 ];
 
 const FAQS = [
-  { q: "Нужна ли предварительная запись?",
-    a: "Да, мы принимаем только по записи — чтобы подготовить пространство лично для вас. Оставьте заявку на сайте или позвоните нам." },
-  { q: "Что такое Закрытый Клуб?",
-    a: "Это камерное сообщество наших постоянных гостей. Эксклюзивные скидки, бесплатное тестирование новых процедур, прямое общение с Анной и Андреем." },
-  { q: "Как стать членом Закрытого Клуба?",
-    a: "Просто оставьте заявку или напишите нам — вступление бесплатно. Количество мест ограничено." },
-  { q: "Есть ли подарочные сертификаты?",
-    a: "Есть! На любую программу или произвольную сумму. Это наш самый популярный подарок." },
-  { q: "Где вы находитесь?",
-    a: "Геленджик. Точный адрес и маршрут пришлём при подтверждении записи. Рядом — бесплатная парковка." },
+  { q: "Больно ли делать лазерную эпиляцию?",
+    a: "Ощущения индивидуальны, но современный аппарат имеет систему охлаждения кожи. Большинство клиентов описывают процедуру как лёгкое покалывание." },
+  { q: "Как подготовиться к процедуре?",
+    a: "За 24–48 часов сбрейте волосы в зоне обработки. За 2 недели избегайте загара и солярия. Остальные рекомендации получите на консультации." },
+  { q: "Нужна ли консультация перед процедурой?",
+    a: "Да, первичная консультация бесплатна. Мы оценим состояние кожи, подберём интенсивность и составим персональный план процедур." },
+  { q: "Сколько сеансов потребуется?",
+    a: "Для лазерной эпиляции — 6–10 сеансов. Для микронидлинга и холодной плазмы — курс от 3 до 6 процедур. Всё зависит от вашей ситуации." },
+  { q: "Есть ли противопоказания?",
+    a: "Беременность, активные воспаления в зоне обработки, некоторые кожные заболевания. Полный список обсудим на консультации." },
 ];
 
-const CLUB_PERKS = [
-  { icon: "Bell",         title: "Первые узнают",    desc: "Акции и новинки — для вас раньше всех" },
-  { icon: "FlaskConical", title: "Тест бесплатно",   desc: "Новые процедуры — только для участников" },
-  { icon: "MessageCircle",title: "Прямой контакт",   desc: "Общайтесь с нами лично, влияйте на салон" },
-  { icon: "Gift",         title: "Бонусы",           desc: "Призы, сюрпризы в день рождения, подарки" },
-];
-
-/* ── Хук анимации появления ─────────────────── */
+/* ─── Хук reveal ──────────────────────────── */
 function useReveal() {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const io = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { el.classList.add("visible"); io.disconnect(); } },
-      { threshold: 0.1 }
+      ([e]) => { if (e.isIntersecting) { el.classList.add("on"); io.disconnect(); } },
+      { threshold: 0.08 }
     );
     io.observe(el);
     return () => io.disconnect();
@@ -92,22 +146,34 @@ function Reveal({ children, className = "", delay = 0 }: {
   );
 }
 
-/* ── FAQ Item ─────────────────────────────── */
+/* ─── Звёзды ───────────────────────────────── */
+function Stars({ n }: { n: number }) {
+  return (
+    <div className="flex gap-0.5">
+      {Array.from({ length: n }).map((_, i) => (
+        <svg key={i} width="13" height="13" viewBox="0 0 24 24" fill="#C8A97A">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      ))}
+    </div>
+  );
+}
+
+/* ─── FAQ item ─────────────────────────────── */
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div
-      onClick={() => setOpen(!open)}
-      className="border-b border-s-linen/80 cursor-pointer group"
-    >
+    <div onClick={() => setOpen(!open)}
+      className="border-b border-c-petal last:border-0 cursor-pointer group">
       <div className="flex items-center justify-between py-5 gap-4">
-        <span className="font-display text-lg font-medium text-s-ink">{q}</span>
-        <span className={`flex-shrink-0 w-7 h-7 rounded-full border-gold-strong flex items-center justify-center border transition-transform duration-300 ${open ? "rotate-45 bg-s-gold text-white border-s-gold" : "text-s-gold"}`}>
-          <Icon name="Plus" size={14} />
+        <span className="font-display text-[17px] font-medium text-c-espresso">{q}</span>
+        <span className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center border transition-all duration-300
+          ${open ? "bg-c-rose-d border-c-rose-d text-white rotate-45" : "border-c-rose text-c-rose-d"}`}>
+          <Icon name="Plus" size={13} />
         </span>
       </div>
       {open && (
-        <div className="pb-5 font-body text-sm text-s-stone leading-relaxed pr-10 animate-fade-in">
+        <div className="pb-5 font-body text-sm text-c-taupe leading-relaxed pr-10 animate-appear">
           {a}
         </div>
       )}
@@ -115,84 +181,81 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   );
 }
 
-/* ── Модалка заявки ─────────────────────────── */
-function LeadModal({ onClose }: { onClose: () => void }) {
-  const [sent, setSent] = useState(false);
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [comment, setComment] = useState("");
-
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSent(true);
-  };
+/* ─── Модалка заявки ─────────────────────── */
+function Modal({ onClose }: { onClose: () => void }) {
+  const [done, setDone] = useState(false);
+  const [name, setName]     = useState("");
+  const [phone, setPhone]   = useState("");
+  const [service, setService] = useState("");
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-s-ink/40 backdrop-blur-sm animate-fade-in"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-c-espresso/35 backdrop-blur-sm animate-appear"
+      onClick={e => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-s-ivory w-full max-w-md rounded-2xl shadow-2xl p-8 relative border-gold animate-fade-up" style={{ animationDuration: "0.45s" }}>
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-s-stone hover:text-s-ink transition-colors"
-        >
-          <Icon name="X" size={20} />
+      <div className="bg-c-snow w-full max-w-md rounded-3xl shadow-2xl p-8 relative border-petal animate-rise"
+        style={{ animationDuration: "0.42s" }}>
+        <button onClick={onClose}
+          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-c-blush flex items-center justify-center text-c-taupe hover:text-c-espresso transition-colors">
+          <Icon name="X" size={16} />
         </button>
 
-        {sent ? (
-          <div className="text-center py-6">
-            <div className="w-14 h-14 rounded-full grad-gold flex items-center justify-center mx-auto mb-5">
-              <Icon name="Check" size={24} className="text-white" />
+        {done ? (
+          <div className="text-center py-8">
+            <div className="w-16 h-16 rounded-full grad-rose flex items-center justify-center mx-auto mb-5">
+              <Icon name="Check" size={26} className="text-white" />
             </div>
-            <h3 className="font-display text-3xl text-s-ink mb-3">Заявка принята</h3>
-            <p className="font-body text-s-stone text-sm leading-relaxed">
-              Анна или Андрей свяжутся с вами в ближайшее время. Добро пожаловать в наш мир!
+            <h3 className="font-display text-3xl text-c-espresso mb-3">Заявка отправлена</h3>
+            <p className="font-body text-sm text-c-taupe leading-relaxed">
+              Александра свяжется с вами в ближайшее время для подтверждения записи.
             </p>
+            <button onClick={onClose}
+              className="mt-6 font-body text-sm text-c-rose-d underline underline-offset-4 hover:opacity-70 transition-opacity">
+              Закрыть
+            </button>
           </div>
         ) : (
           <>
-            <span className="deco-line mb-6 block" />
-            <h3 className="font-display text-3xl text-s-ink text-center mb-1">Оставить заявку</h3>
-            <p className="font-body text-xs text-s-stone text-center mb-7 tracking-wide uppercase">7 Кругов Рая · Геленджик</p>
+            <div className="text-center mb-7">
+              <span className="deco mx-auto mb-4 block" />
+              <h3 className="font-display text-3xl font-medium text-c-espresso">Записаться</h3>
+              <p className="font-body text-xs text-c-taupe mt-1.5 tracking-widest uppercase">
+                Студия Александры В · Геленджик
+              </p>
+            </div>
 
-            <form onSubmit={submit} className="flex flex-col gap-4">
+            <form onSubmit={e => { e.preventDefault(); setDone(true); }} className="flex flex-col gap-5">
               <div>
-                <label className="font-body text-xs uppercase tracking-widest text-s-stone block mb-1.5">Ваше имя</label>
-                <input
-                  required
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  placeholder="Анна"
-                  className="w-full border-b border-s-linen focus:border-s-gold outline-none bg-transparent font-body text-sm text-s-ink py-2 transition-colors placeholder:text-s-stone/40"
-                />
+                <label className="font-body text-[11px] uppercase tracking-widest text-c-taupe block mb-2">Ваше имя</label>
+                <input required value={name} onChange={e => setName(e.target.value)}
+                  placeholder="Александра"
+                  className="w-full border-b border-c-petal focus:border-c-rose-d outline-none bg-transparent font-body text-sm text-c-espresso py-2 transition-colors placeholder:text-c-taupe/40" />
               </div>
               <div>
-                <label className="font-body text-xs uppercase tracking-widest text-s-stone block mb-1.5">Телефон</label>
-                <input
-                  required
-                  value={phone}
-                  onChange={e => setPhone(e.target.value)}
-                  placeholder="+7 000 000-00-00"
-                  type="tel"
-                  className="w-full border-b border-s-linen focus:border-s-gold outline-none bg-transparent font-body text-sm text-s-ink py-2 transition-colors placeholder:text-s-stone/40"
-                />
+                <label className="font-body text-[11px] uppercase tracking-widest text-c-taupe block mb-2">Телефон</label>
+                <input required value={phone} onChange={e => setPhone(e.target.value)}
+                  placeholder="+7 000 000-00-00" type="tel"
+                  className="w-full border-b border-c-petal focus:border-c-rose-d outline-none bg-transparent font-body text-sm text-c-espresso py-2 transition-colors placeholder:text-c-taupe/40" />
               </div>
               <div>
-                <label className="font-body text-xs uppercase tracking-widest text-s-stone block mb-1.5">Пожелание (необязательно)</label>
-                <input
-                  value={comment}
-                  onChange={e => setComment(e.target.value)}
-                  placeholder="Программа, удобное время..."
-                  className="w-full border-b border-s-linen focus:border-s-gold outline-none bg-transparent font-body text-sm text-s-ink py-2 transition-colors placeholder:text-s-stone/40"
-                />
+                <label className="font-body text-[11px] uppercase tracking-widest text-c-taupe block mb-2">Интересующая процедура</label>
+                <select value={service} onChange={e => setService(e.target.value)}
+                  className="w-full border-b border-c-petal focus:border-c-rose-d outline-none bg-transparent font-body text-sm text-c-espresso py-2 transition-colors">
+                  <option value="">Выберите...</option>
+                  <option>Лазерная эпиляция</option>
+                  <option>Ламинирование бровей</option>
+                  <option>Микронидлинг</option>
+                  <option>Холодная плазма</option>
+                  <option>Консультация</option>
+                </select>
               </div>
-              <button
-                type="submit"
-                className="mt-2 w-full grad-gold text-white font-body font-medium text-sm tracking-widest uppercase py-3.5 rounded-full hover:opacity-90 transition-opacity"
-              >
+              <button type="submit"
+                className="mt-1 w-full grad-rose text-white font-body font-semibold text-[13px] tracking-widest uppercase py-3.5 rounded-full hover:opacity-90 transition-opacity">
                 Отправить заявку
               </button>
+              <p className="text-center font-body text-[11px] text-c-taupe/60">
+                Или позвоните: <a href={PHONE_RAW} className="text-c-rose-d hover:underline">{PHONE}</a>
+              </p>
             </form>
           </>
         )}
@@ -201,14 +264,15 @@ function LeadModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-/* ── Главная страница ──────────────────────── */
+/* ─── Главная ──────────────────────────────── */
 export default function Index() {
-  const [modal, setModal]   = useState(false);
-  const [menu,  setMenu]    = useState(false);
+  const [modal,   setModal]   = useState(false);
+  const [menu,    setMenu]    = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activePrice, setActivePrice] = useState(0);
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 50);
+    const fn = () => setScrolled(window.scrollY > 48);
     window.addEventListener("scroll", fn);
     return () => window.removeEventListener("scroll", fn);
   }, []);
@@ -219,411 +283,474 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-s-ivory font-body">
-      {/* ── NAVBAR ── */}
+    <div className="min-h-screen bg-c-snow font-body">
+
+      {/* ── NAVBAR ─────────────────────────────── */}
       <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
-        scrolled ? "bg-s-ivory/95 backdrop-blur-md shadow-sm border-b border-s-linen" : "bg-transparent"
+        scrolled ? "glass border-b border-c-petal shadow-sm" : "bg-transparent"
       }`}>
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-6 h-[68px] flex items-center justify-between">
+
           {/* Лого */}
-          <a href="#" className="font-display text-xl font-medium text-s-ink tracking-wide">
-            7 <span className="text-gold">Кругов Рая</span>
+          <a href="#" className="flex flex-col leading-none">
+            <span className="font-display text-lg font-medium text-c-espresso tracking-wide">Александра В</span>
+            <span className="font-body text-[10px] tracking-[0.25em] uppercase text-c-taupe">Студия косметологии</span>
           </a>
 
-          {/* Desktop */}
+          {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8">
             {NAV.map(n => (
               <button key={n.id} onClick={() => go(n.id)}
-                className="underline-gold font-body text-sm text-s-stone hover:text-s-ink transition-colors tracking-wide">
+                className="nav-ul font-body text-sm text-c-brown/75 hover:text-c-espresso transition-colors tracking-wide">
                 {n.label}
               </button>
             ))}
           </nav>
 
-          {/* Телефон + CTA */}
-          <div className="hidden md:flex items-center gap-5">
-            <a href={PHONE_RAW} className="font-body text-sm text-s-stone hover:text-s-gold transition-colors flex items-center gap-1.5">
+          <div className="hidden md:flex items-center gap-4">
+            <a href={PHONE_RAW}
+              className="font-body text-sm text-c-taupe hover:text-c-rose-d transition-colors flex items-center gap-1.5">
               <Icon name="Phone" size={13} />
               {PHONE}
             </a>
             <button onClick={() => setModal(true)}
-              className="grad-gold text-white font-body text-xs font-medium tracking-widest uppercase px-5 py-2.5 rounded-full hover:opacity-90 transition-opacity">
-              Оставить заявку
+              className="grad-rose text-white font-body text-[12px] font-semibold tracking-widest uppercase px-5 py-2.5 rounded-full hover:opacity-90 transition-opacity">
+              Записаться
             </button>
           </div>
 
-          {/* Mobile burger */}
-          <button className="md:hidden text-s-ink" onClick={() => setMenu(!menu)}>
+          {/* Mobile */}
+          <button className="md:hidden text-c-espresso" onClick={() => setMenu(!menu)}>
             <Icon name={menu ? "X" : "Menu"} size={22} />
           </button>
         </div>
 
-        {/* Mobile menu */}
         {menu && (
-          <div className="md:hidden bg-s-ivory border-t border-s-linen px-6 py-6 flex flex-col gap-5 animate-fade-in">
+          <div className="md:hidden bg-c-snow border-t border-c-petal px-6 py-7 flex flex-col gap-5 animate-appear">
             {NAV.map(n => (
               <button key={n.id} onClick={() => go(n.id)}
-                className="text-left font-display text-2xl text-s-ink hover:text-s-gold transition-colors">
+                className="text-left font-display text-2xl font-medium text-c-espresso hover:text-c-rose-d transition-colors">
                 {n.label}
               </button>
             ))}
-            <a href={PHONE_RAW} className="font-body text-sm text-s-gold flex items-center gap-2">
+            <a href={PHONE_RAW} className="font-body text-sm text-c-rose-d flex items-center gap-2">
               <Icon name="Phone" size={14} /> {PHONE}
             </a>
             <button onClick={() => { setMenu(false); setModal(true); }}
-              className="grad-gold text-white font-body text-xs font-medium tracking-widest uppercase px-5 py-3 rounded-full">
-              Оставить заявку
+              className="grad-rose text-white font-body text-[12px] font-semibold tracking-widest uppercase px-5 py-3 rounded-full">
+              Записаться
             </button>
           </div>
         )}
       </header>
 
-      {/* ── HERO ── */}
-      <section className="relative min-h-screen flex items-end overflow-hidden">
-        {/* Фото */}
+      {/* ── HERO ───────────────────────────────── */}
+      <section className="relative min-h-screen flex items-center overflow-hidden">
+        {/* Фото на правой части */}
         <div className="absolute inset-0">
-          <img src={IMG.hero} alt="SPA интерьер" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 grad-hero" />
+          <img src={IMG.hero} alt="Студия косметологии"
+            className="w-full h-full object-cover object-center" />
+          <div className="absolute inset-0 grad-hero-overlay" />
         </div>
 
-        {/* Декоративные блики */}
-        <div className="absolute top-20 right-20 w-72 h-72 rounded-full bg-s-gold/8 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-40 left-10 w-48 h-48 rounded-full bg-s-rose/20 blur-2xl pointer-events-none" />
+        {/* Декоративные элементы */}
+        <div className="absolute top-24 right-[38%] w-64 h-64 rounded-full bg-c-rose/20 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-32 right-[25%] w-40 h-40 rounded-full bg-amber-100/40 blur-2xl pointer-events-none" />
 
-        {/* Контент — прижат к низу */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pb-20 md:pb-28">
-          <div className="max-w-2xl">
-            <p className="font-body text-xs tracking-[0.35em] uppercase text-s-gold mb-6 animate-fade-in">
-              Геленджик · Закрытый SPA-клуб
-            </p>
-
-            <h1 className="font-display font-light text-s-ink leading-[1.08] mb-6 animate-fade-up"
-              style={{ fontSize: "clamp(3rem, 7vw, 6rem)" }}>
-              Это место, где<br />
-              <em className="not-italic text-gold">разрешено быть</em><br />
-              в контакте с собой
-            </h1>
-
-            <p className="font-body text-s-stone text-base md:text-lg leading-relaxed max-w-lg mb-10 animate-fade-up"
-              style={{ animationDelay: "120ms" }}>
-              7 Кругов Рая — пространство для тех, кто выбирает заботу о себе как ценность,
-              а не роскошь.
-            </p>
-
-            <div className="flex flex-wrap gap-4 animate-fade-up" style={{ animationDelay: "220ms" }}>
-              <button onClick={() => setModal(true)}
-                className="grad-gold text-white font-body font-medium text-sm tracking-widest uppercase px-8 py-4 rounded-full hover:opacity-90 transition-all hover:scale-[1.02] shadow-lg">
-                Оставить заявку
-              </button>
-              <button onClick={() => go("programs")}
-                className="btn-glass text-s-ink font-body text-sm tracking-wide px-8 py-4 rounded-full">
-                Смотреть программы
-              </button>
-            </div>
-          </div>
+        {/* Вертикальная метка слева */}
+        <div className="absolute left-7 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-4">
+          <div className="w-px h-16 bg-gradient-to-b from-transparent to-c-rose" />
+          <span className="font-body text-[10px] tracking-[0.4em] uppercase text-c-taupe rotate-180"
+            style={{ writingMode: "vertical-rl" }}>Геленджик</span>
+          <div className="w-px h-16 bg-gradient-to-t from-transparent to-c-rose" />
         </div>
 
-        {/* Scroll hint */}
-        <div className="absolute bottom-6 right-8 flex items-center gap-2 text-s-stone/50 text-xs font-body tracking-widest animate-bounce">
-          <span>Scroll</span>
-          <Icon name="ArrowDown" size={12} />
-        </div>
-      </section>
+        {/* Основной контент */}
+        <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-16 pt-28 pb-20 w-full">
+          <div className="max-w-[560px]">
+            <Reveal>
+              <span className="deco mb-5 block" />
+              <p className="font-body text-[11px] tracking-[0.4em] uppercase text-c-rose-d mb-5">
+                Эстетическая косметология
+              </p>
+            </Reveal>
 
-      {/* ── О НАС ── */}
-      <section id="about" className="py-24 md:py-32 bg-s-ivory">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
+            <Reveal delay={80}>
+              <h1 className="font-display font-medium text-c-espresso leading-[1.1] mb-6"
+                style={{ fontSize: "clamp(2.8rem, 6vw, 5.2rem)" }}>
+                Начни путь<br />
+                к <em className="not-italic text-rose-grad">совершенству</em>
+              </h1>
+            </Reveal>
 
-            {/* Фото */}
-            <Reveal className="relative order-2 md:order-1">
-              <div className="relative">
-                <img src={IMG.about} alt="SPA процедура"
-                  className="w-full h-[520px] object-cover rounded-2xl" />
-                {/* Плашка рейтинга */}
-                <div className="absolute -top-5 -right-5 bg-white rounded-2xl px-5 py-4 shadow-lg border-gold">
-                  <div className="font-display text-3xl font-medium text-s-gold">★ 4.9</div>
-                  <div className="font-body text-xs text-s-stone mt-0.5">рейтинг в Яндекс</div>
-                </div>
-                {/* Плашка опыта */}
-                <div className="absolute -bottom-5 -left-5 bg-s-ink rounded-2xl px-5 py-4 shadow-lg">
-                  <div className="font-display text-3xl font-medium text-s-gold-l">7+</div>
-                  <div className="font-body text-xs text-s-ivory/60 mt-0.5">лет в Геленджике</div>
-                </div>
-                {/* Вертикальная линия-деко */}
-                <div className="absolute left-[-28px] top-1/4 bottom-1/4 w-px bg-gradient-to-b from-transparent via-s-gold/40 to-transparent hidden md:block" />
+            <Reveal delay={160}>
+              <p className="font-body text-c-taupe text-base md:text-[17px] leading-relaxed max-w-[440px] mb-10">
+                Лазерная эпиляция, ламинирование бровей, микронидлинг
+                и холодная плазма — современные технологии для вашей красоты.
+              </p>
+            </Reveal>
+
+            <Reveal delay={240}>
+              <div className="flex flex-wrap gap-3">
+                <button onClick={() => setModal(true)}
+                  className="grad-rose text-white font-body font-semibold text-[13px] tracking-widest uppercase px-8 py-4 rounded-full hover:opacity-90 transition-all hover:scale-[1.02] shadow-md">
+                  Записаться
+                </button>
+                <button onClick={() => go("services")}
+                  className="font-body text-[13px] text-c-brown tracking-wide px-8 py-4 rounded-full border-petal border hover:bg-c-blush transition-colors">
+                  Наши направления
+                </button>
               </div>
             </Reveal>
 
-            {/* Текст */}
-            <Reveal className="order-1 md:order-2">
-              <span className="deco-line" style={{ margin: "0 0 20px 0" }} />
-              <p className="font-body text-xs tracking-[0.3em] uppercase text-s-gold mb-4">О нас</p>
-              <h2 className="font-display font-light text-s-ink leading-tight mb-6"
-                style={{ fontSize: "clamp(2.2rem, 4vw, 3.5rem)" }}>
-                Анна и Андрей —<br />
-                <em className="not-italic text-gold">основатели клуба</em>
-              </h2>
-              <p className="font-body text-s-stone leading-relaxed mb-4 text-[15px]">
-                Мы создали «7 Кругов Рая» как место, где каждый гость чувствует себя желанным.
-                Не просто клиент — а человек, о котором по-настоящему заботятся.
-              </p>
-              <p className="font-body text-s-stone leading-relaxed mb-8 text-[15px]">
-                Наш Закрытый Клуб — это камерное пространство для близких гостей.
-                Эксклюзивные условия, первый доступ к новинкам и живое общение с нами лично.
-              </p>
-
-              <div className="flex flex-col gap-4">
+            {/* Мини-статистика */}
+            <Reveal delay={320}>
+              <div className="flex gap-8 mt-12 pt-8 border-t border-c-petal">
                 {[
-                  { icon: "Users",  text: "Закрытый клуб с ограниченным числом мест" },
-                  { icon: "Shield", text: "Только лицензированные специалисты" },
-                  { icon: "Heart",  text: "Каждая деталь — с заботой о вас" },
-                ].map(item => (
-                  <div key={item.text} className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-s-linen flex items-center justify-center">
-                      <Icon name={item.icon} size={14} className="text-s-gold" />
-                    </div>
-                    <span className="font-body text-sm text-s-stone pt-1.5">{item.text}</span>
+                  { val: "5.0", sub: "Рейтинг на Яндексе" },
+                  { val: "4+",  sub: "Направления" },
+                  { val: "∞",   sub: "Довольных клиентов" },
+                ].map(s => (
+                  <div key={s.sub}>
+                    <div className="font-display text-3xl font-medium text-c-espresso">{s.val}</div>
+                    <div className="font-body text-[11px] text-c-taupe mt-0.5 leading-tight">{s.sub}</div>
                   </div>
                 ))}
               </div>
             </Reveal>
           </div>
         </div>
-      </section>
 
-      {/* ── КЛУБНЫЕ ПРИВИЛЕГИИ ── */}
-      <section className="py-20 bg-s-pearl">
-        <div className="max-w-7xl mx-auto px-6">
-          <Reveal className="text-center mb-14">
-            <span className="deco-line mb-5 block" />
-            <p className="font-body text-xs tracking-[0.3em] uppercase text-s-gold mb-3">Закрытый клуб</p>
-            <h2 className="font-display font-light text-s-ink" style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)" }}>
-              Привилегии <em className="not-italic text-gold">участников</em>
-            </h2>
-          </Reveal>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {CLUB_PERKS.map((p, i) => (
-              <Reveal key={p.title} delay={i * 80}>
-                <div className="lift border-gold bg-white rounded-2xl p-7 text-center h-full">
-                  <div className="w-11 h-11 rounded-xl grad-gold flex items-center justify-center mx-auto mb-5">
-                    <Icon name={p.icon} size={18} className="text-white" />
-                  </div>
-                  <h3 className="font-display text-xl font-medium text-s-ink mb-2">{p.title}</h3>
-                  <p className="font-body text-sm text-s-stone leading-relaxed">{p.desc}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal className="text-center mt-10">
-            <button onClick={() => setModal(true)}
-              className="grad-gold text-white font-body text-xs font-medium tracking-widest uppercase px-8 py-3.5 rounded-full hover:opacity-90 transition-opacity">
-              Вступить в клуб
-            </button>
-          </Reveal>
+        {/* Scroll */}
+        <div className="absolute bottom-7 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-c-taupe/40 animate-float">
+          <div className="w-[1px] h-8 bg-gradient-to-b from-transparent to-c-rose" />
         </div>
       </section>
 
-      {/* ── ПРОГРАММЫ ── */}
-      <section id="programs" className="py-24 md:py-32 bg-s-ivory">
-        <div className="max-w-7xl mx-auto px-6">
+      {/* ── О СТУДИИ ───────────────────────────── */}
+      <section id="about" className="py-24 md:py-32 bg-c-snow">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+            <Reveal>
+              <div className="relative">
+                <img src={IMG.result} alt="Результат процедуры"
+                  className="w-full h-[500px] object-cover object-top rounded-3xl" />
+                {/* Бейдж */}
+                <div className="absolute -bottom-5 -right-4 bg-white rounded-2xl px-5 py-4 border-petal shadow-lg">
+                  <Stars n={5} />
+                  <div className="font-display text-base font-medium text-c-espresso mt-1.5">Яндекс · 5.0</div>
+                  <div className="font-body text-[11px] text-c-taupe">более 40 отзывов</div>
+                </div>
+                {/* Декор-кружок */}
+                <div className="absolute -top-6 -left-6 w-24 h-24 rounded-full border-rose-m border-2 opacity-40" />
+                <div className="absolute top-8 -left-2 w-12 h-12 rounded-full bg-c-rose/30 blur-xl" />
+              </div>
+            </Reveal>
+
+            <Reveal delay={100}>
+              <span className="deco mb-5 block" />
+              <p className="font-body text-[11px] tracking-[0.35em] uppercase text-c-rose-d mb-4">О студии</p>
+              <h2 className="font-display font-medium text-c-espresso leading-tight mb-6"
+                style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)" }}>
+                Красота — это<br />
+                <em className="not-italic text-rose-grad">точная наука</em>
+              </h2>
+              <p className="font-body text-c-taupe text-[15px] leading-relaxed mb-4">
+                Студия эстетической косметологии Александры В — место, где современные технологии
+                встречаются с индивидуальным подходом к каждому клиенту.
+              </p>
+              <p className="font-body text-c-taupe text-[15px] leading-relaxed mb-8">
+                Мы работаем только на сертифицированном оборудовании и используем
+                профессиональные препараты. Каждая процедура начинается с консультации —
+                потому что ваша кожа уникальна.
+              </p>
+
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                {[
+                  { icon: "Shield",   text: "Сертифицированное оборудование" },
+                  { icon: "UserCheck",text: "Индивидуальный подход"          },
+                  { icon: "Award",    text: "Опытный специалист"             },
+                  { icon: "Heart",    text: "Безопасные процедуры"           },
+                ].map(item => (
+                  <div key={item.text} className="flex items-start gap-2.5">
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-c-petal flex items-center justify-center mt-0.5">
+                      <Icon name={item.icon} size={13} className="text-c-rose-d" />
+                    </div>
+                    <span className="font-body text-[13px] text-c-brown leading-snug pt-1">{item.text}</span>
+                  </div>
+                ))}
+              </div>
+
+              <button onClick={() => setModal(true)}
+                className="grad-rose text-white font-body font-semibold text-[12px] tracking-widest uppercase px-7 py-3 rounded-full hover:opacity-90 transition-opacity">
+                Бесплатная консультация
+              </button>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ── НАПРАВЛЕНИЯ ────────────────────────── */}
+      <section id="services" className="py-24 md:py-32 grad-warm">
+        <div className="max-w-6xl mx-auto px-6">
           <Reveal className="text-center mb-16">
-            <span className="deco-line mb-5 block" />
-            <p className="font-body text-xs tracking-[0.3em] uppercase text-s-gold mb-3">Программы</p>
-            <h2 className="font-display font-light text-s-ink" style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)" }}>
-              Выберите <em className="not-italic text-gold">своё расслабление</em>
+            <span className="deco mx-auto mb-5 block" />
+            <p className="font-body text-[11px] tracking-[0.35em] uppercase text-c-rose-d mb-3">Направления</p>
+            <h2 className="font-display font-medium text-c-espresso"
+              style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)" }}>
+              Наши <em className="not-italic text-rose-grad">процедуры</em>
             </h2>
           </Reveal>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {PROGRAMS.map((p, i) => (
-              <Reveal key={p.title} delay={i * 60}>
-                <div className="lift border-gold bg-white rounded-2xl p-7 flex flex-col h-full group">
+          <div className="grid sm:grid-cols-2 gap-5">
+            {SERVICES.map((s, i) => (
+              <Reveal key={s.title} delay={i * 70}>
+                <div className="card-lift bg-white rounded-3xl p-8 border-petal h-full flex flex-col group">
                   <div className="flex items-start justify-between mb-6">
-                    <div className="w-11 h-11 rounded-xl bg-s-linen group-hover:grad-gold transition-all duration-500 flex items-center justify-center">
-                      <Icon name={p.icon} size={18} className="text-s-gold group-hover:text-white transition-colors duration-500" />
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
+                      style={{ background: `linear-gradient(135deg, ${s.accent}22, ${s.accent}44)` }}>
+                      <Icon name={s.icon} size={20} style={{ color: s.accent }} />
                     </div>
-                    {p.hot && (
-                      <span className="text-[10px] font-body font-medium tracking-widest uppercase px-3 py-1 bg-s-gold text-white rounded-full">
-                        Хит
-                      </span>
-                    )}
+                    <span className="font-body text-[10px] tracking-widest uppercase px-3 py-1.5 rounded-full bg-c-blush text-c-rose-d">
+                      {s.tag}
+                    </span>
                   </div>
-                  <h3 className="font-display text-2xl font-medium text-s-ink mb-2">{p.title}</h3>
-                  <p className="font-body text-sm text-s-stone leading-relaxed flex-1 mb-5">{p.desc}</p>
-                  <div className="flex items-center justify-between pt-4 border-t border-s-linen">
-                    <div className="flex items-center gap-1.5 text-s-stone">
-                      <Icon name="Clock" size={13} />
-                      <span className="font-body text-xs tracking-wide">{p.time}</span>
-                    </div>
+                  <h3 className="font-display text-[22px] font-medium text-c-espresso mb-3">{s.title}</h3>
+                  <p className="font-body text-[14px] text-c-taupe leading-relaxed flex-1 mb-5">{s.desc}</p>
+                  <div className="flex items-center justify-between pt-4 border-t border-c-petal">
+                    <span className="font-body text-[12px] text-c-rose-d flex items-center gap-1.5">
+                      <Icon name="CheckCircle" size={13} />
+                      {s.detail}
+                    </span>
                     <button onClick={() => setModal(true)}
-                      className="font-body text-xs text-s-gold tracking-wide hover:underline transition">
-                      Записаться →
+                      className="font-body text-[12px] text-c-brown hover:text-c-rose-d transition-colors flex items-center gap-1">
+                      Записаться
+                      <Icon name="ArrowRight" size={13} />
                     </button>
                   </div>
                 </div>
               </Reveal>
             ))}
           </div>
+
+          {/* Фото-баннер */}
+          <Reveal className="mt-8">
+            <div className="relative rounded-3xl overflow-hidden h-52 md:h-64">
+              <img src={IMG.services} alt="Процедуры" className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-r from-c-espresso/70 to-transparent" />
+              <div className="absolute inset-0 flex items-center px-10 md:px-14">
+                <div>
+                  <p className="font-body text-[11px] tracking-[0.35em] uppercase text-c-rose mb-2">Всё включено</p>
+                  <h3 className="font-display text-2xl md:text-3xl font-medium text-white mb-4">
+                    Первая консультация — бесплатно
+                  </h3>
+                  <button onClick={() => setModal(true)}
+                    className="glass border-petal font-body text-[12px] font-semibold tracking-widest uppercase text-c-espresso px-6 py-2.5 rounded-full hover:bg-white transition-colors">
+                    Записаться
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* ── ПРАЙС ── */}
-      <section id="price" className="py-24 md:py-32 bg-s-pearl">
+      {/* ── ЦЕНЫ ───────────────────────────────── */}
+      <section id="price" className="py-24 md:py-32 bg-c-snow">
         <div className="max-w-4xl mx-auto px-6">
           <Reveal className="text-center mb-14">
-            <span className="deco-line mb-5 block" />
-            <p className="font-body text-xs tracking-[0.3em] uppercase text-s-gold mb-3">Прайс-лист</p>
-            <h2 className="font-display font-light text-s-ink" style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)" }}>
-              Стоимость <em className="not-italic text-gold">процедур</em>
+            <span className="deco mx-auto mb-5 block" />
+            <p className="font-body text-[11px] tracking-[0.35em] uppercase text-c-rose-d mb-3">Стоимость</p>
+            <h2 className="font-display font-medium text-c-espresso"
+              style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)" }}>
+              Цены на <em className="not-italic text-rose-grad">процедуры</em>
             </h2>
           </Reveal>
 
           <Reveal>
-            <div className="bg-white rounded-2xl border-gold overflow-hidden shadow-sm">
-              {PRICES.map((item, i) => (
+            {/* Табы */}
+            <div className="flex gap-2 flex-wrap justify-center mb-8">
+              {PRICES.map((cat, i) => (
+                <button key={cat.category} onClick={() => setActivePrice(i)}
+                  className={`font-body text-[13px] tracking-wide px-5 py-2 rounded-full transition-all ${
+                    activePrice === i
+                      ? "grad-rose text-white shadow-sm"
+                      : "bg-c-blush text-c-taupe hover:text-c-espresso"
+                  }`}>
+                  {cat.category}
+                </button>
+              ))}
+            </div>
+
+            {/* Таблица */}
+            <div className="bg-white rounded-3xl border-petal overflow-hidden shadow-sm">
+              {PRICES[activePrice].items.map((item, i) => (
                 <div key={item.name}
-                  className={`flex items-center justify-between px-7 py-5 hover:bg-s-ivory/60 transition-colors ${
-                    i < PRICES.length - 1 ? "border-b border-s-linen" : ""
-                  }`}
-                >
-                  <div>
-                    <div className="font-display text-lg font-medium text-s-ink">{item.name}</div>
-                    <div className="flex items-center gap-1 text-s-stone mt-0.5">
-                      <Icon name="Clock" size={11} />
-                      <span className="font-body text-xs">{item.time}</span>
-                    </div>
-                  </div>
-                  <div className="font-display text-xl font-medium text-gold whitespace-nowrap ml-4">
-                    {item.price}
-                  </div>
+                  className={`flex items-center justify-between px-7 py-5 hover:bg-c-blush transition-colors ${
+                    i < PRICES[activePrice].items.length - 1 ? "border-b border-c-petal" : ""
+                  }`}>
+                  <div className="font-display text-[17px] font-medium text-c-espresso">{item.name}</div>
+                  <div className="font-display text-xl font-medium text-rose-grad whitespace-nowrap ml-4">{item.price}</div>
                 </div>
               ))}
             </div>
-            <p className="text-center font-body text-xs text-s-stone/60 mt-4">
-              Члены Закрытого Клуба получают эксклюзивные скидки — уточняйте при записи
+
+            <p className="text-center font-body text-[12px] text-c-taupe/60 mt-4">
+              Точная стоимость определяется на консультации · Действуют комплексные скидки
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* ── ГАЛЕРЕЯ ── */}
-      <section className="py-24 bg-s-ivory">
-        <div className="max-w-7xl mx-auto px-6">
+      {/* ── ОТЗЫВЫ ─────────────────────────────── */}
+      <section className="py-24 grad-warm">
+        <div className="max-w-6xl mx-auto px-6">
           <Reveal className="text-center mb-14">
-            <span className="deco-line mb-5 block" />
-            <p className="font-body text-xs tracking-[0.3em] uppercase text-s-gold mb-3">Атмосфера</p>
-            <h2 className="font-display font-light text-s-ink" style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)" }}>
-              Пространство <em className="not-italic text-gold">рая</em>
+            <span className="deco mx-auto mb-5 block" />
+            <p className="font-body text-[11px] tracking-[0.35em] uppercase text-c-rose-d mb-3">Отзывы</p>
+            <h2 className="font-display font-medium text-c-espresso"
+              style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)" }}>
+              Говорят <em className="not-italic text-rose-grad">клиенты</em>
             </h2>
           </Reveal>
 
-          <Reveal>
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-              <div className="md:col-span-7">
-                <img src={IMG.hero} alt="Интерьер SPA"
-                  className="w-full h-72 md:h-[460px] object-cover rounded-2xl" />
-              </div>
-              <div className="md:col-span-5 flex flex-col gap-4">
-                <img src={IMG.about} alt="Процедура"
-                  className="w-full h-48 md:h-[218px] object-cover rounded-2xl" />
-                <img src={IMG.flatlay} alt="Аксессуары"
-                  className="w-full h-48 md:h-[218px] object-cover rounded-2xl" />
-              </div>
-            </div>
-          </Reveal>
+          <div className="grid md:grid-cols-3 gap-5">
+            {REVIEWS.map((r, i) => (
+              <Reveal key={r.name} delay={i * 80}>
+                <div className="card-lift bg-white rounded-3xl p-7 border-petal h-full flex flex-col">
+                  <Stars n={r.stars} />
+                  <p className="font-body text-[14px] text-c-taupe leading-relaxed flex-1 mt-4 mb-5">
+                    «{r.text}»
+                  </p>
+                  <div className="flex items-center gap-3 pt-4 border-t border-c-petal">
+                    <div className="w-8 h-8 rounded-full bg-c-petal flex items-center justify-center">
+                      <span className="font-display text-sm font-medium text-c-rose-d">{r.name[0]}</span>
+                    </div>
+                    <span className="font-body text-[13px] font-medium text-c-brown">{r.name}</span>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── FAQ ── */}
-      <section id="faq" className="py-24 md:py-32 bg-s-pearl">
+      {/* ── FAQ ────────────────────────────────── */}
+      <section className="py-24 bg-c-snow">
         <div className="max-w-3xl mx-auto px-6">
-          <Reveal className="text-center mb-14">
-            <span className="deco-line mb-5 block" />
-            <p className="font-body text-xs tracking-[0.3em] uppercase text-s-gold mb-3">Вопросы</p>
-            <h2 className="font-display font-light text-s-ink" style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)" }}>
-              Часто <em className="not-italic text-gold">спрашивают</em>
+          <Reveal className="text-center mb-12">
+            <span className="deco mx-auto mb-5 block" />
+            <p className="font-body text-[11px] tracking-[0.35em] uppercase text-c-rose-d mb-3">Вопросы</p>
+            <h2 className="font-display font-medium text-c-espresso"
+              style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)" }}>
+              Часто <em className="not-italic text-rose-grad">спрашивают</em>
             </h2>
           </Reveal>
-
           <Reveal>
-            <div>
-              {FAQS.map(f => <FaqItem key={f.q} q={f.q} a={f.a} />)}
-            </div>
+            {FAQS.map(f => <FaqItem key={f.q} q={f.q} a={f.a} />)}
           </Reveal>
         </div>
       </section>
 
-      {/* ── CTA BANNER ── */}
-      <section className="py-28 relative overflow-hidden bg-s-ink">
-        {/* Текстура */}
-        <div className="absolute inset-0 opacity-[0.03]"
-          style={{ backgroundImage: "repeating-linear-gradient(45deg, #D4B483 0, #D4B483 1px, transparent 0, transparent 50%)", backgroundSize: "14px 14px" }} />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-s-gold/10 rounded-full blur-3xl" />
+      {/* ── CTA ────────────────────────────────── */}
+      <section className="py-28 relative overflow-hidden bg-c-espresso">
+        <div className="absolute inset-0 opacity-[0.06]"
+          style={{ backgroundImage: "radial-gradient(circle, #E8C9BA 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
+        <div className="absolute top-0 left-0 w-96 h-96 rounded-full bg-c-rose/10 blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-amber-200/8 blur-3xl" />
 
         <Reveal>
-          <div className="max-w-3xl mx-auto px-6 text-center relative z-10">
-            <span className="deco-line mb-6 block" />
-            <p className="font-body text-xs tracking-[0.35em] uppercase text-s-gold mb-4">Запись</p>
-            <h2 className="font-display font-light text-s-ivory leading-tight mb-5"
-              style={{ fontSize: "clamp(2.2rem, 4vw, 3.8rem)" }}>
-              Подарите себе<br />
-              <em className="not-italic text-gold">время для себя</em>
+          <div className="max-w-2xl mx-auto px-6 text-center relative z-10">
+            <span className="deco mx-auto mb-6 block" />
+            <p className="font-body text-[11px] tracking-[0.4em] uppercase text-c-rose mb-4">Запись</p>
+            <h2 className="font-display font-medium text-white leading-tight mb-5"
+              style={{ fontSize: "clamp(2.2rem, 4.5vw, 4rem)" }}>
+              Начни путь<br />
+              к <em className="not-italic text-rose-grad">совершенству</em>
             </h2>
-            <p className="font-body text-s-ivory/55 text-base mb-10 leading-relaxed">
-              Оставьте заявку — и мы свяжемся с вами, чтобы подобрать идеальную программу.
+            <p className="font-body text-white/50 text-[15px] mb-10 leading-relaxed">
+              Оставьте заявку — и я свяжусь с вами для подбора удобного времени и процедуры.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button onClick={() => setModal(true)}
-                className="grad-gold text-white font-body font-medium text-sm tracking-widest uppercase px-9 py-4 rounded-full hover:opacity-90 transition-all hover:scale-[1.02] shadow-lg">
-                Оставить заявку
+                className="grad-rose text-white font-body font-semibold text-[13px] tracking-widest uppercase px-9 py-4 rounded-full hover:opacity-90 transition-all hover:scale-[1.02] shadow-lg">
+                Записаться на процедуру
               </button>
-              <a href={VK_URL} target="_blank" rel="noopener noreferrer"
-                className="border border-s-ivory/20 text-s-ivory font-body text-sm tracking-wide px-9 py-4 rounded-full hover:bg-white/5 transition-all flex items-center gap-2 justify-center">
-                <Icon name="MessageCircle" size={16} />
-                ВКонтакте
+              <a href={PHONE_RAW}
+                className="border border-white/15 text-white/75 font-body text-[13px] tracking-wide px-9 py-4 rounded-full hover:bg-white/5 transition-all flex items-center gap-2 justify-center">
+                <Icon name="Phone" size={15} />
+                {PHONE}
               </a>
             </div>
           </div>
         </Reveal>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="bg-s-ink border-t border-white/5 py-10">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div>
-              <div className="font-display text-xl font-medium text-s-ivory">
-                7 <span className="text-gold">Кругов Рая</span>
+      {/* ── КОНТАКТЫ ───────────────────────────── */}
+      <section id="contacts" className="py-20 bg-c-blush">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-8">
+            <Reveal>
+              <div className="flex flex-col gap-1.5">
+                <span className="font-body text-[10px] tracking-widest uppercase text-c-taupe mb-2">Телефон</span>
+                <a href={PHONE_RAW} className="font-display text-xl text-c-espresso hover:text-c-rose-d transition-colors">
+                  {PHONE}
+                </a>
+                <span className="font-body text-[13px] text-c-taupe">Позвоните или напишите</span>
               </div>
-              <div className="font-body text-xs text-s-ivory/35 mt-0.5">SPA-клуб · Геленджик</div>
-            </div>
+            </Reveal>
+            <Reveal delay={80}>
+              <div className="flex flex-col gap-1.5">
+                <span className="font-body text-[10px] tracking-widest uppercase text-c-taupe mb-2">Адрес</span>
+                <span className="font-display text-xl text-c-espresso">{ADDRESS}</span>
+                <span className="font-body text-[13px] text-c-taupe">Геленджик, рядом с набережной</span>
+              </div>
+            </Reveal>
+            <Reveal delay={160}>
+              <div className="flex flex-col gap-1.5">
+                <span className="font-body text-[10px] tracking-widest uppercase text-c-taupe mb-2">Режим работы</span>
+                <span className="font-display text-xl text-c-espresso">Пн–Сб: 9:00–20:00</span>
+                <span className="font-body text-[13px] text-c-taupe">Воскресенье — по договорённости</span>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
 
-            <nav className="flex flex-wrap gap-6 justify-center">
+      {/* ── FOOTER ─────────────────────────────── */}
+      <footer className="bg-c-espresso py-10 border-t border-white/5">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-5">
+            <div>
+              <div className="font-display text-lg font-medium text-white">Александра В</div>
+              <div className="font-body text-[11px] text-white/35 tracking-widest uppercase mt-0.5">
+                Студия косметологии · Геленджик
+              </div>
+            </div>
+            <nav className="flex gap-7 flex-wrap justify-center">
               {NAV.map(n => (
                 <button key={n.id} onClick={() => go(n.id)}
-                  className="font-body text-sm text-s-ivory/40 hover:text-s-gold transition-colors">
+                  className="font-body text-sm text-white/40 hover:text-c-rose transition-colors">
                   {n.label}
                 </button>
               ))}
             </nav>
-
-            <a href={PHONE_RAW} className="font-body text-sm text-s-gold flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <a href={PHONE_RAW}
+              className="font-body text-sm text-c-rose hover:opacity-80 transition-opacity flex items-center gap-2">
               <Icon name="Phone" size={13} />
               {PHONE}
             </a>
           </div>
-
-          <div className="border-t border-white/5 mt-8 pt-6 text-center">
-            <p className="font-body text-xs text-s-ivory/20">© 2024 7 Кругов Рая. Все права защищены.</p>
+          <div className="border-t border-white/5 mt-7 pt-6 text-center">
+            <p className="font-body text-[11px] text-white/20">
+              © 2024 Студия косметологии Александры В. Геленджик.
+            </p>
           </div>
         </div>
       </footer>
 
-      {/* ── MODAL ── */}
-      {modal && <LeadModal onClose={() => setModal(false)} />}
+      {modal && <Modal onClose={() => setModal(false)} />}
     </div>
   );
 }

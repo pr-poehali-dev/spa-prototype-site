@@ -4,145 +4,127 @@
 
 @layer base {
   :root {
-    --background: 40 30% 97%;
-    --foreground: 25 30% 12%;
-    --card: 40 25% 95%;
-    --card-foreground: 25 30% 12%;
-    --popover: 40 25% 95%;
-    --popover-foreground: 25 30% 12%;
-    --primary: 38 38% 53%;
-    --primary-foreground: 40 30% 97%;
-    --secondary: 38 20% 88%;
-    --secondary-foreground: 25 30% 12%;
-    --muted: 38 18% 92%;
-    --muted-foreground: 25 15% 45%;
-    --accent: 38 38% 53%;
-    --accent-foreground: 40 30% 97%;
+    --background: 30 30% 99%;
+    --foreground: 20 35% 14%;
+    --card: 30 25% 98%;
+    --card-foreground: 20 35% 14%;
+    --popover: 30 25% 98%;
+    --popover-foreground: 20 35% 14%;
+    --primary: 24 40% 63%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 24 30% 93%;
+    --secondary-foreground: 20 35% 14%;
+    --muted: 24 20% 94%;
+    --muted-foreground: 20 15% 50%;
+    --accent: 24 40% 63%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 72% 51%;
-    --destructive-foreground: 40 30% 97%;
-    --border: 38 22% 86%;
-    --input: 38 22% 86%;
-    --ring: 38 38% 53%;
-    --radius: 0.5rem;
-    --sidebar-background: 25 30% 12%;
-    --sidebar-foreground: 40 30% 97%;
-    --sidebar-primary: 38 38% 53%;
-    --sidebar-primary-foreground: 40 30% 97%;
-    --sidebar-accent: 25 25% 20%;
-    --sidebar-accent-foreground: 40 30% 97%;
-    --sidebar-border: 25 20% 22%;
-    --sidebar-ring: 38 38% 53%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 24 25% 89%;
+    --input: 24 25% 89%;
+    --ring: 24 40% 63%;
+    --radius: 0.75rem;
+    --sidebar-background: 20 35% 14%;
+    --sidebar-foreground: 30 30% 96%;
+    --sidebar-primary: 24 40% 63%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 20 30% 22%;
+    --sidebar-accent-foreground: 30 30% 96%;
+    --sidebar-border: 20 25% 22%;
+    --sidebar-ring: 24 40% 63%;
   }
 
   * {
     @apply border-border;
   }
-
   html {
     scroll-behavior: smooth;
   }
-
   body {
-    @apply bg-s-ivory text-s-ink font-body antialiased;
+    @apply bg-c-snow text-c-espresso font-body antialiased;
     overflow-x: hidden;
   }
 }
 
 @layer utilities {
-  /* ── Градиенты ── */
-  .grad-gold {
-    background: linear-gradient(135deg, #b8975a 0%, #d4b483 50%, #b8975a 100%);
+  .grad-rose {
+    background: linear-gradient(135deg, #e8c9ba 0%, #c9957e 100%);
   }
-  .grad-pearl {
-    background: linear-gradient(160deg, #faf7f2 0%, #f0e8d8 100%);
+  .grad-warm {
+    background: linear-gradient(160deg, #fdfbf9 0%, #f9f3ef 50%, #f3e9e3 100%);
   }
-  .grad-hero {
+  .grad-hero-overlay {
     background: linear-gradient(
-      to bottom,
-      rgba(250, 247, 242, 0.15) 0%,
-      rgba(245, 240, 232, 0.55) 60%,
-      rgba(237, 229, 216, 0.9) 100%
+      105deg,
+      rgba(253, 251, 249, 0.94) 0%,
+      rgba(249, 243, 239, 0.76) 40%,
+      rgba(243, 233, 227, 0.15) 100%
     );
   }
 
-  /* ── Текстовый градиент ── */
-  .text-gold {
-    background: linear-gradient(135deg, #8b6f47, #d4b483, #8b6f47);
+  .text-rose-grad {
+    background: linear-gradient(135deg, #a0604a, #e8c9ba);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  /* ── Тонкая золотая рамка ── */
-  .border-gold {
-    border: 1px solid rgba(184, 151, 90, 0.28);
+  .border-petal {
+    border: 1px solid rgba(232, 201, 186, 0.5);
   }
-  .border-gold-strong {
-    border: 1px solid rgba(184, 151, 90, 0.55);
+  .border-rose-m {
+    border: 1px solid rgba(201, 149, 126, 0.45);
   }
 
-  /* ── Появление при скролле ── */
   .reveal {
     opacity: 0;
-    transform: translateY(36px);
+    transform: translateY(28px);
     transition:
       opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
       transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .reveal.visible {
+  .reveal.on {
     opacity: 1;
     transform: translateY(0);
   }
 
-  /* ── Hover для карточек ── */
-  .lift {
+  .card-lift {
     transition:
-      transform 0.35s ease,
-      box-shadow 0.35s ease;
+      transform 0.32s ease,
+      box-shadow 0.32s ease;
   }
-  .lift:hover {
+  .card-lift:hover {
     transform: translateY(-5px);
-    box-shadow: 0 18px 48px rgba(44, 33, 24, 0.09);
+    box-shadow: 0 18px 48px rgba(92, 61, 48, 0.11);
   }
 
-  /* ── Подчёркивание ссылки ── */
-  .underline-gold {
+  .nav-ul {
     position: relative;
   }
-  .underline-gold::after {
+  .nav-ul::after {
     content: "";
     position: absolute;
     left: 0;
-    bottom: -2px;
+    bottom: -3px;
     width: 0;
     height: 1px;
-    background: #b8975a;
+    background: #c9957e;
     transition: width 0.3s ease;
   }
-  .underline-gold:hover::after {
+  .nav-ul:hover::after {
     width: 100%;
   }
 
-  /* ── Декоративная линия ── */
-  .deco-line {
+  .deco {
     display: block;
-    width: 48px;
+    width: 36px;
     height: 1px;
-    background: #b8975a;
-    margin: 0 auto;
+    background: linear-gradient(90deg, #c9957e, #c8a97a);
   }
 
-  /* ── Стеклянная кнопка ── */
-  .btn-glass {
-    background: rgba(250, 247, 242, 0.65);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(184, 151, 90, 0.45);
-    transition:
-      background 0.3s,
-      transform 0.25s;
-  }
-  .btn-glass:hover {
-    background: rgba(250, 247, 242, 0.9);
-    transform: translateY(-2px);
+  .glass {
+    background: rgba(253, 251, 249, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 }
